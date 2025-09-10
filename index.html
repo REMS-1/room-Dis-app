@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Room Occupancy & Timetable System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #c8e6c9, #fff9c4);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      perspective: 1200px;
+    }
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0px 12px 30px rgba(0,0,0,0.25);
+      width: 650px;
+      transform: rotateY(-5deg);
+      transition: transform 0.4s;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    .card:hover {
+      transform: rotateY(0deg) scale(1.02);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #1b5e20;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #1b5e20;
+      border-radius: 6px;
+      background: #f9fbe7;
+      box-shadow: inset 0px 2px 5px rgba(0,0,0,0.15);
+    }
+    button {
+      margin-top: 15px;
+      background: #1b5e20;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: #2e7d32;
+    }
+    #schedule {
+      margin-top: 20px;
+    }
+    .room {
+      background: #c8e6c9;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 6px solid #1b5e20;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+      transition: transform 0.3s;
+    }
+    .room:hover {
+      transform: scale(1.05);
+      background: #a5d6a7;
+    }
+    .occupied {
+      background: #ffecb3;
+      border-left: 6px solid #ff6f00;
+    }
+    #statusBox {
+      background: #1b5e20;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+    }
+    #clock {
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #000;
+    }
+    small {
+      display: block;
+      text-align: center;
+      margin-top: 5px;
+      color: #777;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DISPLAY PAGE (default) -->
+  <div class="card" id="displayCard">
+    <h1>Room Occupancy Dashboard</h1>
+    <div id="clock"></div>
+    <div id="statusBox">Currently Occupied: None</div>
+    <div id="schedule"></div>
+    <button onclick="showLogin()">Admin Login</button>
+    <small>For Admins Only</small>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div class="card" id="loginCard" style="display:none;">
+    <h1>Admin Login</h1>
+    <label for="username">Your Name:</label>
+    <input type="text" id="username" required placeholder="Enter your name">
+    <label for="password">Password:</label>
+    <input type="password" id="password" required placeholder="Enter 1234">
+    <button onclick="login()">Login</button>
+    <button onclick="cancelLogin()">Cancel</button>
+  </div>
+
+  <!-- ADMIN PAGE -->
+  <div class="card" id="adminCard" style="display:none;">
+    <h1 id="welcomeText"></h1>
+    <div id="clock"></div>
+
+    <label for="room">Room Number:</label>
+    <select id="room" required>
+      <option value="101">Room 101</option><option value="102">Room 102</option>
+      <option value="103">Room 103</option><option value="104">Room 104</option>
+      <option value="105">Room 105</option><option value="201">Room 201</option>
+      <option value="202">Room 202</option><option value="203">Room 203</option>
+      <option value="204">Room 204</option><option value="205">Room 205</option>
+      <option value="301">Room 301</option><option value="302">Room 302</option>
+      <option value="303">Room 303</option><option value="304">Room 304</option>
+      <option value="305">Room 305</option><option value="401">Room 401</option>
+      <option value="402">Room 402</option><option value="403">Room 403</option>
+      <option value="404">Room 404</option><option value="405">Room 405</option>
+    </select>
+
+    <label for="time">Time Slot:</label>
+    <input type="text" id="time" placeholder="08:00–10:00" required>
+
+    <label for="course">Course & Year:</label>
+    <input type="text" id="course" placeholder="Computer Science Y1" required>
+
+    <button onclick="saveTimetable()">Save Timetable</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    let adminName = "";
+
+    // Show login card
+    function showLogin(){
+      document.getElementById("displayCard").style.display = "none";
+      document.getElementById("loginCard").style.display = "block";
+    }
+    // Cancel login
+    function cancelLogin(){
+      document.getElementById("loginCard").style.display = "none";
+      document.getElementById("displayCard").style.display = "block";
+    }
+    // Admin login
+    function login(){
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if(pass === "1234"){
+        adminName = user || "Admin";
+        document.getElementById("welcomeText").innerText = `Welcome, ${adminName}`;
+        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("adminCard").style.display = "block";
+      } else {
+        alert("Invalid password! Use 1234");
+      }
+    }
+
+    // Save timetable
+    function saveTimetable(){
+      const room = document.getElementById("room").value;
+      const time = document.getElementById("time").value;
+      const course = document.getElementById("course").value;
+
+      let schedules = JSON.parse(localStorage.getItem("schedules")) || {};
+      if(!schedules[room]) schedules[room] = {};
+      schedules[room][time] = course;
+
+      localStorage.setItem("schedules", JSON.stringify(schedules));
+      alert(`Saved for Room ${room}`);
+
+      // Return to Display after saving
+      document.getElementById("adminCard").style.display = "none";
+      document.getElementById("displayCard").style.display = "block";
+      updateSchedule();
+    }
+
+    // Update schedule display
+    function updateSchedule() {
+      const schedules = JSON.parse(localStorage.getItem("schedules")) || {};
+      const scheduleDiv = document.getElementById("schedule");
+      scheduleDiv.innerHTML = "";
+
+      const now = new Date();
+      const currentTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+
+      let occupiedRooms = [];
+
+      for(let room in schedules){
+        let occupied = false;
+        let roomDiv = document.createElement("div");
+        roomDiv.classList.add("room");
+        let content = `<h3>Room ${room}</h3><ul>`;
+
+        for(let time in schedules[room]){
+          content += `<li><b>${time}</b>: ${schedules[room][time]}</li>`;
+
+          let parts = time.split("–");
+          if(parts.length === 2){
+            let start = parts[0].trim();
+            let end = parts[1].trim();
+            if(currentTime >= start && currentTime <= end){
+              occupied = true;
+            }
+          }
+        }
+        content += "</ul>";
+        roomDiv.innerHTML = content;
+        if(occupied){
+          roomDiv.classList.add("occupied");
+          occupiedRooms.push(room);
+        }
+        scheduleDiv.appendChild(roomDiv);
+      }
+
+      document.getElementById("statusBox").innerText = 
+        occupiedRooms.length > 0 
+        ? "Currently Occupied: " + occupiedRooms.join(", ") 
+        : "Currently Occupied: None";
+    }
+
+    // Live clock
+    function updateClock(){
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString();
+      const clocks = document.querySelectorAll("#clock");
+      clocks.forEach(c => c.innerText = "Current Time: " + timeStr);
+    }
+
+    // Logout
+    function logout(){
+      document.getElementById("adminCard").style.display = "none";
+      document.getElementById("displayCard").style.display = "block";
+      updateSchedule();
+    }
+
+    // Start clock + schedule updates
+    setInterval(updateClock, 1000);
+    updateClock();
+    updateSchedule();
+    setInterval(updateSchedule, 60000);
+  </script>
+
+</body>
+</html>
