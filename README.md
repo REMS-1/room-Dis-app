@@ -15,19 +15,6 @@ It is designed for classrooms, labs, or study spaces to make scheduling and usag
 - **Backend:** Node.js + Express  
 - **Frontend:** React.js (Dashboard UI)  
 - **Database:** MongoDB / Firebase
- 
- ## 🚀 How to Run
-### 1. Clone the repository
-```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
-cd YOUR-REPO
-```bash
-cd backend
-npm install
-npm start
-cd frontend
-npm install
-npm run dev
 
 ## 👩‍💻 Author
 **Rehema Mwau**  
