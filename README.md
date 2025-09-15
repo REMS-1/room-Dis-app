@@ -23,5 +23,13 @@ It is designed for classrooms, labs, or study spaces to make scheduling and usag
 - 🌍 Location: Nairobi, Kenya  
 - 🔗 LinkedIn: [Rehema Mwau](https://linkedin.com/in/YOUR-LINK)  
 - 📱 WhatsApp: [+254 787587185](https://wa.me/254787587185)  
+- 🐙 GitHub: [REMS-1](https://github.com/REMS-1/room-Dis-app)
+
+# 🚀 How to Run
+
+### Clone the repository
+```bash
+git clone https://github.com/REMS-1/room-Dis-app.git
+cd room-Dis-app
 
 
