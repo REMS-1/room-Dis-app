@@ -16,29 +16,25 @@ It is designed for classrooms, labs, or study spaces to make scheduling and usag
 - **Frontend:** React.js (Dashboard UI)  
 - **Database:** MongoDB / Firebase
  
-## 🚀 How to Run
-1. Clone the repo:
-   ```bash
  ## 🚀 How to Run
-### Backend
+### 1. Clone the repository
+```bash
+git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
+cd YOUR-REPO
 ```bash
 cd backend
 npm install
 npm start
-
 cd frontend
 npm install
 npm run dev
-  git clone https://github.com/YOUR-USERNAME/YOUR-REPO.git
 
-
----
-
-## 🔹 2. Author Details  
-At the end of the README, add something like this:  
-
-```markdown
 ## 👩‍💻 Author
 **Rehema Mwau**  
-- 📧 Email: rehemanduku68@gmail.com  
-- 🔗 LinkedIn: [Rehema Mwau](https://www.linkedin.com/in/YOUR-LINK)  
+
+- 📧 Email: [rehemanduku68@gmail.com](mailto:rehemanduku68@gmail.com)  
+- 🌍 Location: Nairobi, Kenya  
+- 🔗 LinkedIn: [Rehema Mwau](https://linkedin.com/in/YOUR-LINK)  
+- 📱 WhatsApp: [+254 787587185](https://wa.me/254787587185)  
+
+
